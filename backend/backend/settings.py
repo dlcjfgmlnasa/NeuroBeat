@@ -49,8 +49,6 @@ THIRD_PARTY_APPS = [
     'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt',
-    'django_crontab',
-    'drf_yasg',
 ]
 
 LOCAL_APPS = [
@@ -65,9 +63,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 AUTH_USER_MODEL = 'user.User'
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -75,6 +71,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
@@ -151,11 +148,12 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',),
 }
 
-CORS_ORIGIN_WHITELIST = [
-    'http://127.0.0.1:8000',
-    'http://neurobeat.co.kr',
-    'https://neurobeat.co.kr'
-]
+
+CORS_ORIGIN_WHITELIST = ['http://localhost:8000',
+                         'http://127.0.0.1:8000',
+                         'http://neurobeat.co.kr',
+                         'https://neurobeat.co.kr']
+
 
 CORS_ALLOW_CREDENTIALS = True
 

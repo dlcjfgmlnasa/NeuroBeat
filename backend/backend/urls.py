@@ -21,7 +21,7 @@ from user.views import MyTokenObtainPairView
 
 urlpatterns = [
     # 관리자 페이지
-    path('admin/', admin.site.urls),
+    path('/', admin.site.urls),
 
     # JWT Token API
     path('api/v1/token-auth/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),

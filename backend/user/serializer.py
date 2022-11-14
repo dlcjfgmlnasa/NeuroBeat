@@ -17,12 +17,28 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-
         # Add custom claims
         token['name'] = user.username
         token['is_staff'] = user.is_staff
 
         return token
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = USER_MODEL
+        fields = (
+            'pk',
+            'username',
+            'gender',
+            'birth',
+            'diagnosis',
+            'attention'
+        )
+        read_only_fields = (
+            'pk',
+            'username',
+        )
 
 
 class AccountCreateSerializer(serializers.ModelSerializer):

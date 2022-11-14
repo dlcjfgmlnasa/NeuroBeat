@@ -6,6 +6,7 @@ from rest_framework.permissions import AllowAny
 from user.serializer import AccountCreateSerializer
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
+from user.serializer import UserSerializer
 from .serializer import MyTokenObtainPairSerializer
 
 
@@ -18,16 +19,64 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 class UserView(APIView):
     def get(self, request):
-        print(request)
-        print(request.auth)
-        # user = get_user_model().objects.get(
-        #     id=request.auth.payload['user_id']
-        # )
-        # print(user)
-        # user_pk = self.kwargs['user_id']
-        # print(user_pk)
+        try:
+            user = get_user_model().objects.get(
+                id=request.auth.payload['user_id']
+            )
+        except USER_MODEL.DoesNotExist:
+            return Response(
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer_cls = UserSerializer(user)
         return Response(
+            serializer_cls.data,
             status=status.HTTP_200_OK
+        )
+
+    def put(self, request):
+        try:
+            user = get_user_model().objects.get(
+                id=request.auth.payload['user_id']
+            )
+        except USER_MODEL.DoesNotExist:
+            return Response(
+                status=status.HTTP_404_NOT_FOUND
+            )
+        serializer_cls = UserSerializer(user, data=request.data)
+        if serializer_cls.is_valid():
+            serializer_cls.save()
+            return Response(
+                serializer_cls.data,
+                status=status.HTTP_200_OK
+            )
+        return Response(
+            serializer_cls.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    def delete(self, request):
+        try:
+            user = get_user_model().objects.get(
+                id=request.auth.payload['user_id']
+            )
+        except USER_MODEL.DoesNotExist:
+            return Response(
+                status=status.HTTP_404_NOT_FOUND
+            )
+        user.delete()
+        return Response(
+            status=status.HTTP_204_NO_CONTENT
+        )
+
+
+class UserListView(APIView):
+    def get(self, request):
+        users = get_user_model().objects.all()
+        serializer_cls = UserSerializer(users, many=True)
+        return Response(
+            serializer_cls.data,
+            status=status.HTTP_200_OK,
         )
 
 

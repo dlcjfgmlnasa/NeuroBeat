@@ -9,6 +9,11 @@ urlpatterns = [
         name='user'
     ),
     path(
+        'list/',
+        views.UserListView.as_view(),
+        name='user list'
+    ),
+    path(
         'account/',
         views.AccountView.as_view(),
         name='account'

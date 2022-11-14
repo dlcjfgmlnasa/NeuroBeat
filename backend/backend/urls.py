@@ -1,7 +1,7 @@
 """backend URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/3.2/topics/http/urls/
+    https://docs.djangoproject.com/en/4.1/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -14,8 +14,20 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
+from user.views import MyTokenObtainPairView
+
 
 urlpatterns = [
+    # 관리자 페이지
     path('admin/', admin.site.urls),
+
+    # JWT Token API
+    path('api/v1/token-auth/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/v1/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/v1/verify/', TokenVerifyView.as_view(), name='token_verify'),
+
+    # REST API
+    path('api/v1/user/', include('user.urls')),
 ]

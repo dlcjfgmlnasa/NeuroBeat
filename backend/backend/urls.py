@@ -27,7 +27,8 @@ urlpatterns = [
     path('api/v1/token-auth/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/v1/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/verify/', TokenVerifyView.as_view(), name='token_verify'),
-    #
-    # # REST API
+
+    # REST API
     path('api/v1/user/', include('user.urls')),
+    path('api/v1/game/', include('game.urls'))
 ]

@@ -146,6 +146,7 @@ SIMPLE_JWT = {
     'SIGNING_KEY': 'SECRET',
     'ALGORITHM': 'HS256',
     'AUTH_HEADER_TYPES': ('JWT',),
+    'UPDATE_LAST_LOGIN': True,
 }
 
 

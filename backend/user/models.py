@@ -6,6 +6,7 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser, TimeStampedModel):
     GENDER_CHOICE = (
+        (0, 'None'),
         (1, 'MALE'),
         (2, 'FEMALE'),
     )
@@ -19,7 +20,7 @@ class User(AbstractUser, TimeStampedModel):
     # 생년 월일
     birth = models.DateField(
         max_length=25,
-        null=False, blank=False,
+        null=True, blank=True,
         db_column='BIRTH'
     )
     # 병명
@@ -30,9 +31,11 @@ class User(AbstractUser, TimeStampedModel):
     )
     # 집중도
     attention = models.FloatField(
-        null=False, blank=False,
+        null=True, blank=True,
         db_column='ATTENTION'
     )
+    first_name = None
+    last_name = None
 
     class Meta:
         db_table = 'NG_USER'

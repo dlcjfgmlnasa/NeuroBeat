@@ -7,7 +7,7 @@ from backend.models import TimeStampedModel
 class Device(TimeStampedModel):
     DEVICE_TYPE_CHOICE = (
         (1, 'neurotx_v1'),  # NeuroTx 에서 개발한 첫번째 기기
-        (2, 'neurotx_v2')   # 개발 진행 중...
+        (2, 'neurotx_v2')   # 개발 진행 중인 기기... 추후에 추가될 수 있음
     )
     device_type = models.CharField(
         null=False, blank=False,
@@ -18,6 +18,11 @@ class Device(TimeStampedModel):
     sampling_rate = models.FloatField(
         null=False, blank=False,
         db_column='SAMPLING_RATE'
+    )
+    description = models.TextField(
+        null=True, blank=True,
+        max_length=100,
+        db_column='DESCRIPTION'
     )
 
     class Meta:
@@ -37,7 +42,12 @@ class BioSignal(TimeStampedModel):
         related_name='bio_signal',
         db_column='DEVICE_ID'
     )
+    sample_size = models.IntegerField(
+        null=False, blank=False,
+        db_column='SAMPLE_SIZE'
+    )
     data = models.JSONField(
+        null=False, blank=False,
         db_column='DATA'
     )
 

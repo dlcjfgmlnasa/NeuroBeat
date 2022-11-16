@@ -15,13 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView, TokenObtainPairView
+from rest_framework_simplejwt.views import TokenRefreshView, TokenVerifyView
 from user.views import MyTokenObtainPairView
 
 
 urlpatterns = [
     # 관리자 페이지
-    path('admin/', admin.site.urls),
+    path('', admin.site.urls),
 
     # JWT Token API
     path('api/v1/token-auth/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
@@ -31,4 +31,5 @@ urlpatterns = [
     # REST API
     path('api/v1/user/', include('user.urls')),
     path('api/v1/game/', include('game.urls')),
+    path('api/v1/signal/', include('signals.urls'))
 ]

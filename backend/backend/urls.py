@@ -20,9 +20,6 @@ from user.views import MyTokenObtainPairView
 
 
 urlpatterns = [
-    # 관리자 페이지
-    path('', admin.site.urls),
-
     # JWT Token API
     path('api/v1/token-auth/', MyTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/v1/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
@@ -31,5 +28,8 @@ urlpatterns = [
     # REST API
     path('api/v1/user/', include('user.urls')),
     path('api/v1/game/', include('game.urls')),
-    path('api/v1/signal/', include('signals.urls'))
+    path('api/v1/signal/', include('signals.urls')),
+
+    # 관리자 페이지
+    path('', admin.site.urls),
 ]

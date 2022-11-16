@@ -138,8 +138,8 @@ class Game(TimeStampedModel):
 
 class MiniGame(TimeStampedModel):
     MINI_GAME_CHOICE = (
-        (1, 'Corsi Block Test'),
-        (2, 'Digit Span Test'),
+        (1, 'Corsi_Block_Test'),
+        (2, 'Digit_Span_Test'),
         (3, 'K-TMT-E'),
         (4, 'K-BNT'),
         (5, 'SVLT-E'),
@@ -152,7 +152,7 @@ class MiniGame(TimeStampedModel):
     )
     game_type = models.CharField(
         choices=MINI_GAME_CHOICE,
-        max_length=30,
+        max_length=5,
         null=False, blank=False,
         db_column='MINI_GAME_TYPE'
     )

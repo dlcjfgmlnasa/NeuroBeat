@@ -4,6 +4,14 @@ from user.serializer import UserSerializer
 from game.models import Game, MiniGame
 
 
+class MainGameSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
+
+    class Meta:
+        model = Game
+        fields = '__all__'
+
+
 class MiniGameSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
 

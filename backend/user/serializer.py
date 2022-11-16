@@ -33,7 +33,7 @@ class UserSerializer(serializers.ModelSerializer):
             'gender',
             'birth',
             'diagnosis',
-            'attention'
+            'attention',
         )
         read_only_fields = (
             'pk',

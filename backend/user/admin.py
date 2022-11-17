@@ -11,5 +11,7 @@ class UserAdmin(admin.ModelAdmin):
         'gender',
         'birth',
         'attention',
-        'diagnosis'
+        'diagnosis',
+        'int_dt',
+        'upt_dt'
     )

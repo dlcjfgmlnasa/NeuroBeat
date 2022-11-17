@@ -9,7 +9,7 @@ urlpatterns = [
         name='bio_signal'
     ),
     path(
-        'attention_estimation/',
+        '<int:device_pk>/attention_estimation/',
         views.EstimateAttentionAPIView.as_view(),
         name='attention estimation'
     ),

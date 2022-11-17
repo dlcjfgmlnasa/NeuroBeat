@@ -1,9 +1,13 @@
 # -*- coding:utf-8 -*-
+import json
+import numpy as np
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from signals.serializer import DeviceSerializers
-from signals.models import Device, BioSignal
+from game.models import Game
+from signals.serializer import DeviceSerializers, BioSignalSerializer
+from signals.models import Device
+from signals.algorithms import attention
 
 
 class DeviceAPIView(APIView):
@@ -61,14 +65,80 @@ class DeviceDetailAPIView(APIView):
 
 
 class BioSignalAPIView(APIView):
+    @staticmethod
+    def get_parameter(request):
+        game_pk = request.GET.get('game_id')
+        device_pk = request.GET.get('device_id')
+        return game_pk, device_pk
+
     def post(self, request):
+        game_pk, device_pk = self.get_parameter(request)
+        if game_pk is None or device_pk is None:
+            return Response(
+                {
+                    'error': '파라미터에 game_pk 그리고 device_pk 을 입력하시오'
+                },
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            game = Game.objects.get(id=game_pk)
+        except Game.DoesNotExist:
+            return Response(
+                status=status.HTTP_404_NOT_FOUND
+            )
+        try:
+            device = Device.objects.get(id=device_pk)
+        except Device.DoesNotExist:
+            return Response(
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer_cls = BioSignalSerializer(data=request.data)
+        if serializer_cls.is_valid():
+            serializer_cls.save(
+                game=game,
+                device=device,
+                sample_size=len(json.loads(request.data['data'])['Time'])
+            )
+            return Response(
+                serializer_cls.data,
+                status=status.HTTP_200_OK
+            )
         return Response(
-            status=status.HTTP_200_OK
+            serializer_cls.errors,
+            status=status.HTTP_400_BAD_REQUEST
         )
 
 
 class EstimateAttentionAPIView(APIView):
-    def post(self, requests):
+    def post(self, request, device_pk):
+        try:
+            device = Device.objects.get(id=device_pk)
+        except Device.DoesNotExist:
+            return Response(
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        data = request.POST.get('data')
+        if data is None:
+            result = {'error': '[data]를 입력하세요.'}
+            return Response(
+                result,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            data = json.loads(data)
+            eeg1, eeg2 = data['EEG1'], data['EEG2']
+            eeg = np.stack([list(eeg1.values()), list(eeg2.values())], axis=0)
+        except KeyError:
+            return Response(
+                {'error': '입력값의 형태가 옳바르지 않습니다.'},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        attention_value = attention(data=eeg, sfreq=device.sampling_rate)
+        result = {'attention_value': str(attention_value)}
         return Response(
+            result,
             status=status.HTTP_200_OK
         )

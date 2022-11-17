@@ -15,17 +15,16 @@ class DeviceSerializers(serializers.ModelSerializer):
         )
 
 
-class BioSignalInputSerializer(serializers.ModelSerializer):
-    game = MainGameSerializer(read_only=True)
-    device = DeviceSerializers(read_only=True)
+class BioSignalSerializer(serializers.ModelSerializer):
+    data = serializers.JSONField(write_only=True)
+    sample_size = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = BioSignal
-        write_only_fields = (
-            'data'
-        )
         fields = (
+            'id',
             'game',
             'device',
+            'sample_size',
             'data'
         )

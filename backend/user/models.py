@@ -6,15 +6,13 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser, TimeStampedModel):
     GENDER_CHOICE = (
-        (0, 'None'),
         (1, 'MALE'),
         (2, 'FEMALE'),
     )
     # 성별
-    gender = models.CharField(
+    gender = models.IntegerField(
         choices=GENDER_CHOICE,
-        max_length=20,
-        null=False, blank=False,
+        null=True, blank=True,
         db_column='GENDER'
     )
     # 생년 월일

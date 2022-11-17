@@ -35,9 +35,8 @@ class Game(TimeStampedModel):
         db_column='SPEED'
     )
     # 게임 랭크
-    rank = models.CharField(
+    rank = models.IntegerField(
         choices=RANK_CHOICE,
-        max_length=4,
         null=False, blank=False,
         db_column='RANK'
     )
@@ -150,9 +149,8 @@ class MiniGame(TimeStampedModel):
         related_name='mini_game',
         db_column='USER_ID'
     )
-    game_type = models.CharField(
+    game_type = models.IntegerField(
         choices=MINI_GAME_CHOICE,
-        max_length=5,
         null=False, blank=False,
         db_column='MINI_GAME_TYPE'
     )

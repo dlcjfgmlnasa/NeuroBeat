@@ -35,6 +35,11 @@ class User(AbstractUser, TimeStampedModel):
     first_name = None
     last_name = None
 
+    def __str__(self):
+        return self.username
+
     class Meta:
         db_table = 'NG_USER'
         ordering = ['pk']
+
+

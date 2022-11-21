@@ -131,6 +131,9 @@ class Game(TimeStampedModel):
         db_column='ATTENTION'
     )
 
+    def __str__(self):
+        return '{}'.format(self.user.username)
+
     class Meta:
         db_table = 'NG_GAME'
 
@@ -158,6 +161,9 @@ class MiniGame(TimeStampedModel):
         null=False, blank=False,
         db_column='SCORE'
     )
+
+    def __str__(self):
+        return '[{}] {}'.format(self.user.username, self.get_game_type_display())
 
     class Meta:
         db_table = 'NG_MINI_GAME'

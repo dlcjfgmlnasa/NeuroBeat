@@ -9,10 +9,9 @@ class Device(TimeStampedModel):
         (1, 'neurotx_v1'),  # NeuroTx 에서 개발한 첫번째 기기
         (2, 'neurotx_v2')   # 개발 진행 중인 기기... 추후에 추가될 수 있음
     )
-    device_type = models.CharField(
+    device_type = models.IntegerField(
         null=False, blank=False,
         choices=DEVICE_TYPE_CHOICE,
-        max_length=5,
         db_column='DEVICE_TYPE'
     )
     sampling_rate = models.FloatField(
@@ -24,6 +23,9 @@ class Device(TimeStampedModel):
         max_length=100,
         db_column='DESCRIPTION'
     )
+
+    def __str__(self):
+        return '{}'.format(self.get_device_type_display())
 
     class Meta:
         db_table = 'NG_DEVICE'

@@ -148,7 +148,6 @@ class EstimateAttentionAPIView(APIView):
                 {'error': '입력값의 형태가 옳바르지 않습니다.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        eeg = eeg[~np.isnan(eeg)]
         eeg = eeg.T
         attention_value = attention(data=eeg, sfreq=device.sampling_rate)
         result = {'attention_value': str(attention_value), 'baseline_attention': str(user.attention)}

@@ -8,6 +8,10 @@ from game.models import Game
 from signals.serializer import DeviceSerializers, BioSignalSerializer
 from signals.models import Device
 from signals.algorithms import attention
+from django.contrib.auth import get_user_model
+
+
+USER_MODEL = get_user_model()
 
 
 class DeviceAPIView(APIView):
@@ -119,6 +123,15 @@ class EstimateAttentionAPIView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
 
+        try:
+            user = get_user_model().objects.get(
+                id=request.auth.payload['user_id']
+            )
+        except USER_MODEL.DoesNotExist:
+            return Response(
+                status=status.HTTP_404_NOT_FOUND
+            )
+
         data = request.POST.get('data')
         if data is None:
             result = {'error': '[data]를 입력하세요.'}
@@ -135,9 +148,10 @@ class EstimateAttentionAPIView(APIView):
                 {'error': '입력값의 형태가 옳바르지 않습니다.'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
+        eeg = eeg[~np.isnan(eeg)]
+        eeg = eeg.T
         attention_value = attention(data=eeg, sfreq=device.sampling_rate)
-        result = {'attention_value': str(attention_value)}
+        result = {'attention_value': str(attention_value), 'baseline_attention': str(user.attention)}
         return Response(
             result,
             status=status.HTTP_200_OK

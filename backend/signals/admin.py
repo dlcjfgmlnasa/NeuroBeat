@@ -21,5 +21,7 @@ class BioSignalAdmin(admin.ModelAdmin):
         'id',
         'game',
         'device',
-        'sample_size'
+        'sample_size',
+        'int_dt',
+        'upt_dt'
     )
